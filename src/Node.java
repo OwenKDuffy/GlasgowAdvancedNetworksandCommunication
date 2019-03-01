@@ -22,9 +22,7 @@ public class Node {
 
 	private void sendTo(Node nextHop, Packet p)
 	{
-
 		nextHop.receive(p, this);
-
 	}
 
 	private void receive(Packet p, Node from) {
@@ -65,7 +63,7 @@ public class Node {
 //				}
 			}
 			else {
-				//send back error
+				createMessage(p.getSrc(), Packet.MESSAGE_EXPIRED_ERROR, "Message expired at Node: " + this.address + ".");
 			}
 
 		}
@@ -76,5 +74,10 @@ public class Node {
 		Packet p = new Packet(destination, this.address, message);
 		this.receive(p, this);
 
+	}
+	public void createMessage(int destination, int msgType, String message) {
+		Packet p = new Packet(destination, this.address, message);
+		p.setMsgType(msgType);
+		this.receive(p, this);
 	}
 }

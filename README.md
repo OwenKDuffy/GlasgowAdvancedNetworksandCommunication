@@ -18,8 +18,8 @@ be easily viewed;
 The assignment will be done in Java to allow for an Object Oriented Implementation.
 
 TODO:
-* ~~Create Nodes.~~
-* ~~Create links.~~
+* ~~Create Nodes Class.~~
+* ~~Create Links Class.~~
 * Allow Reading from file.
 * Provide tools to create network i.e.:
   * Create Node instruction.
