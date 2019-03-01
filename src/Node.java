@@ -1,18 +1,23 @@
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Node {
 	private int address;
-	private HashMap<Node, Integer> connections;
+	private HashMap<Node, Integer> connectionCost;
+	private ArrayList<Node> connections;
 	private HashMap<Integer, Node> routingTable;
 	Node(int a)
 	{
 		this.address = a;
-		this.connections = new HashMap<Node, Integer>();
+		this.connections = new ArrayList<Node>();
+		this.connectionCost = new HashMap<Node, Integer>();
+		this.routingTable = new HashMap<Integer, Node>();
 	}
 
 	void addConnection(Node connectee, int cost)
 	{
-		connections.put(connectee, (Integer) cost);
+		connections.add(connectee);
+		connectionCost.put(connectee, (Integer) cost);
 	}
 
 	private void sendTo(Node nextHop, Packet p)
@@ -25,7 +30,7 @@ public class Node {
 	private void receive(Packet p, Node from) {
 
 		if(p.getDst() == this.address){
-			System.out.println("" + this.address + " received message:\n" + p.getMsg());
+			System.out.println("Node: " + this.address + " received message: " + p.getMsg());
 		}
 		else {
 			//check if src is in routing table
@@ -33,17 +38,43 @@ public class Node {
 			if (!routingTable.containsKey(p.getSrc())) {
 				routingTable.put(p.getSrc(), from);
 			}
-			
+
 			//if packet still has hops decrement TTL and send
 			if(p.getTTL() > 0) {
 				p.decrementTTL();
-				sendTo(routingTable.get(p.getDst()), p);
+				Node nxt = routingTable.get(p.getDst());
+				try {
+					sendTo(nxt, p);
+
+				} catch (java.lang.NullPointerException e)
+				{
+					for(Node n : connections) {
+						if(!n.equals(from))		//don't send back where it came from
+							sendTo(n, p);		//broadcast if unknown route
+					}
+				}
+//				if (nxt.notNull)
+//				{
+//					for(Node n : connections) {
+//						if(!n.equals(from))		//don't send back where it came from
+//							sendTo(n, p);		//broadcast if unknown route
+//					}
+//				}
+//				else {
+//					sendTo(nxt, p);
+//				}
 			}
 			else {
 				//send back error
 			}
 
 		}
+
+	}
+
+	public void createMessage(int destination, String message) {
+		Packet p = new Packet(destination, this.address, message);
+		this.receive(p, this);
 
 	}
 }
