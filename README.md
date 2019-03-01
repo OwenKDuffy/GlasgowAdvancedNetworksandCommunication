@@ -15,17 +15,19 @@ be easily viewed;
 * engage, on request, a split-horizon capability to help combat slow convergence
 * run the application under Windows 10 x64.
 
-The assignment will be done in C.
+The assignment will be done in Java to allow for an Object Oriented Implementation.
 
 TODO:
-* Create Nodes.
-* Create links.
+* ~~Create Nodes.~~
+* ~~Create links.~~
+* Allow Reading from file.
 * Provide tools to create network i.e.:
   * Create Node instruction.
   * Create Link instruction.
 * Create method to calculate routing tables.
 * Script in link failures and alterations.
 * Interrogate simulation for best route between any two nodes.
-* Traceroot
+* TraceRoot
 * Implement a split horizon system.
 * Test on Windows 10.
+* Multithreading.
