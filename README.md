@@ -20,10 +20,12 @@ The assignment will be done in Java to allow for an Object Oriented Implementati
 TODO:
 * ~~Create Nodes Class.~~
 * ~~Create Links Class.~~
-* Allow Reading from file.
+* ~~Allow Reading from file.~~
+  * ~~Allow file to be provided as argument~~
 * Provide tools to create network i.e.:
-  * Create Node instruction.
-  * Create Link instruction.
+  * ~~Create Node instruction.~~
+  * ~~Create Link instruction.~~
+  * ~~Send message from Node n to Node m~~
 * Create method to calculate routing tables.
 * Script in link failures and alterations.
 * Interrogate simulation for best route between any two nodes.
