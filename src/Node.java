@@ -3,21 +3,22 @@ import java.util.HashMap;
 
 public class Node {
 	private int address;
-	private HashMap<Node, Integer> connectionCost;
-	private ArrayList<Node> connections;
-	private HashMap<Integer, Node> routingTable;
+	//	private HashMap<Node, Integer> connectionCost;
+	private HashMap<Integer, Node> connections;
+	private HashMap<Integer, int[]> routingTable;
 	Node(int a)
 	{
 		this.address = a;
-		this.connections = new ArrayList<Node>();
-		this.connectionCost = new HashMap<Node, Integer>();
-		this.routingTable = new HashMap<Integer, Node>();
+		this.connections = new HashMap<Integer, Node>();
+		//		this.connectionCost = new HashMap<Node, Integer>();
+		this.routingTable = new HashMap<Integer, int[]>();
 	}
 
 	void addConnection(Node connectee, int cost)
 	{
-		connections.add(connectee);
-		connectionCost.put(connectee, (Integer) cost);
+		connections.put(connectee.address, connectee);
+		//		connectionCost.put(connectee, (Integer) cost);
+		routingTable.put(connectee.address, new int[]{cost, connectee.address});
 	}
 
 	private void sendTo(Node nextHop, Packet p)
@@ -33,39 +34,38 @@ public class Node {
 		else {
 			//check if src is in routing table
 			//if not add to
-			if (!routingTable.containsKey(p.getSrc())) {
-				routingTable.put(p.getSrc(), from);
-			}
+			//			if (!routingTable.containsKey(p.getSrc())) {
+			//				routingTable.put(p.getSrc(), new int[] {Integer.MAX_VALUE, from.address);
+			//			}
 
 			//if packet still has hops decrement TTL and send
 			if(p.getTTL() > 0) {
 				p.decrementTTL();
-				Node nxt = routingTable.get(p.getDst());
-				try {
-					sendTo(nxt, p);
-
-				} catch (java.lang.NullPointerException e)
-				{
-					for(Node n : connections) {
-						if(!n.equals(from))		//don't send back where it came from
-							sendTo(n, p);		//broadcast if unknown route
-					}
+				int d = p.getDst();
+				int[] n = routingTable.get(d);
+				if (n == null) {
+					broadcast(p, from);
+					//we dont know how to get here yet
 				}
-//				if (nxt.notNull)
-//				{
-//					for(Node n : connections) {
-//						if(!n.equals(from))		//don't send back where it came from
-//							sendTo(n, p);		//broadcast if unknown route
-//					}
-//				}
-//				else {
-//					sendTo(nxt, p);
-//				}
+				Node nxt = connections.get(n[1]);
+
+				sendTo(nxt, p);
+
+
 			}
 			else {
 				createMessage(p.getSrc(), Packet.MESSAGE_EXPIRED_ERROR, "Message expired at Node: " + this.address + ".");
 			}
 
+		}
+
+	}
+
+	private void broadcast(Packet p, Node from ) {
+		for(Node n : connections.values()) {
+			if(!n.equals(from)) {
+				sendTo(n, p);
+			}
 		}
 
 	}
