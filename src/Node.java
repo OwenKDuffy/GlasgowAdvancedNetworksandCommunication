@@ -30,6 +30,7 @@ public class Node {
 
 		if(p.getDst() == this.address){
 			System.out.println("Node: " + this.address + " received message: " + p.getMsg());
+			return;
 		}
 		else {
 			//check if src is in routing table
@@ -47,11 +48,12 @@ public class Node {
 					broadcast(p, from);
 					//we dont know how to get here yet
 				}
+				else {
 				Node nxt = connections.get(n[1]);
 
 				sendTo(nxt, p);
 
-
+				}
 			}
 			else {
 				createMessage(p.getSrc(), Packet.MESSAGE_EXPIRED_ERROR, "Message expired at Node: " + this.address + ".");
