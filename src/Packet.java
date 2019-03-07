@@ -12,7 +12,10 @@ public class Packet {
 	//2 = request routing table update
 	public static final int ROUTING_TABLE_UPDATE_RES = 3;
 	//3 = respond to routing table update
-	Packet(int destinationAddress, int sourceAddress, String message)
+	public static final int TRACE_ROUTE = 4;
+	//4 = trace route
+
+		Packet(int destinationAddress, int sourceAddress, String message)
 	{
 		dst = destinationAddress;
 		src = sourceAddress;

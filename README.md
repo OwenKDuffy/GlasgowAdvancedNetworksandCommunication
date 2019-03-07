@@ -26,10 +26,10 @@ TODO:
   * ~~Create Node instruction.~~
   * ~~Create Link instruction.~~
   * ~~Send message from Node n to Node m~~
-* Create method to calculate routing tables.
+* ~~Create method to calculate routing tables.~~
 * Script in link failures and alterations.
 * Interrogate simulation for best route between any two nodes.
-* TraceRoot
+* ~~TraceRoot.~~
 * Implement a split horizon system.
 * Test on Windows 10.
 * Multithreading?

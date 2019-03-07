@@ -1,4 +1,3 @@
-import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Node {
@@ -30,30 +29,44 @@ public class Node {
 
 	private void receive(Packet p, Node from) {
 
-		if(p.getDst() == this.address){
-			int msgType = p.getMsgType();
-			switch(msgType)
-			{
-			case 0:
+		int msgType = p.getMsgType();
+		switch(msgType)
+		{
+		case 0:
+			if(p.getDst()== this.address) {
+			System.out.println("Node: " + this.address + " received message: " + p.getMsg());
+			return;
+			}
+			break;
+		case 1:
+			if(p.getDst()== this.address) {
 				System.out.println("Node: " + this.address + " received message: " + p.getMsg());
-				return;
-			case 1:
-				//				standardMessage(p, from);
-				break;
-			case 2:
+			}
+			break;
+		case 2:
+			if(p.getDst()== this.address) {
 				sendRoutingTableUpdate(p.getSrc());
-				break;
-			case 3:
-				updateRoutingTables(p, from);
-				break;
-			default:
-				System.out.println("Node: " + this.address + " received message: " + p.getMsg());
+				return;
+			}			
+			break;
+		case 3:
+			if(p.getDst()== this.address) {
+			updateRoutingTables(p, from);
+			return;
+			}
+			break;
+		case 4:
+			System.out.print("Node " + this.address + " --> ");
+			if(p.getDst()== this.address) {
+				System.out.println("Destination");
 				return;
 			}
+			break;
+		default:
+			System.out.println("Node: " + this.address + " received message: " + p.getMsg());
+			return;			
 		}
-		else {
-			forwardMessage(p, from);
-		}
+		forwardMessage(p, from);
 	}
 
 
