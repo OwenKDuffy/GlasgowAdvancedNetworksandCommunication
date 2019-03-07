@@ -2,11 +2,36 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Node {
+	private class IntPair{
+		int x, y;
+		IntPair(int x, int y)
+		{
+			this.x = x;
+			this.y = y;
+		}
+		
+		public boolean equals(IntPair ip)
+		{
+			if(ip.x == this.x && ip.y == this.y)
+				return true;
+			return false;
+			
+		}
+
+		public boolean inList(ArrayList<IntPair> messages) {
+			for(IntPair ip : messages)
+			{
+				if(ip.equals(this))
+					return true;
+			}
+			return false;
+		}
+	}
 	private int address;
 	//	private HashMap<Node, Integer> connectionCost;
 	private HashMap<Integer, Node> connections;
 	private HashMap<Integer, int[]> routingTable;
-	private ArrayList<Integer> messages;
+	private ArrayList<IntPair> messages;
 	private int msgID;
 	Node(int a)
 	{
@@ -16,7 +41,7 @@ public class Node {
 		this.routingTable = new HashMap<Integer, int[]>();
 		routingTable.put(a, new int[] {0, a});
 		//takes 0 time to send to itself via itself
-		messages = new ArrayList<Integer>();
+		messages = new ArrayList<IntPair>();
 	}
 
 	void addConnection(Node connectee, int cost)
@@ -33,8 +58,10 @@ public class Node {
 
 	private void receive(Packet p, Node from) {
 		int mID = p.getID();
-		if(!messages.contains(mID)) {
-			messages.add(mID);
+		IntPair mpid = new IntPair(p.getSrc(), mID);
+		boolean seenMsg = mpid.inList(messages);
+		if(!seenMsg) {
+			messages.add(mpid);
 			int msgType = p.getMsgType();
 			switch(msgType)
 			{
