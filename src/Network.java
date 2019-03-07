@@ -13,10 +13,14 @@ public class Network {
 		//		line 1 is number of nodes in network
 		//		all subsequent lines are links specified in form
 		//		node a, node b, link cost
-
+		
 		createNetwork(args[0]);
-
-		ntwrk.get(4).createMessage(2, "Test Message");
+		System.out.println(args[0]);
+//		ntwrk.get(4).createMessage(2, "Test Message");
+//		for(Node n : ntwrk)
+//		{
+//			n.createRoutingTableRequest();
+//		}
 		boolean finished = false;
 		Scanner userInput = new Scanner(System.in);
 		while(!finished)
@@ -42,6 +46,17 @@ public class Network {
 			case "link":
 				p = userInput.nextLine();
 				linkCommand(p);
+				break;
+			case "rtable":
+				p = userInput.nextLine();
+				routingTableCommand(p);
+				break;
+			case "crtable":
+				for(Node n : ntwrk)
+				{
+					n.createRoutingTableRequest();
+				}
+				break;
 			default:
 				System.out.println(ERROR_MSG);
 				userInput.nextLine();
@@ -50,13 +65,20 @@ public class Network {
 		}
 		userInput.close();
 	}
+	private static void routingTableCommand(String p) {
+		String np = p.replaceAll(" ", "");
+		Node n = ntwrk.get(Integer.parseInt(np));
+		System.out.println(n.printRoutingTable());
+
+
+	}
 	private static void linkCommand(String p) {
 		String np = p.replaceAll(" ", "");
 		String[] newArgs = np.split(",");
 		Node n1 = ntwrk.get(Integer.parseInt(newArgs[0]));
 		Node n2 = ntwrk.get(Integer.parseInt(newArgs[1]));
 		new Link(n1, n2, Integer.parseInt(newArgs[2]));
-		
+
 	}
 	private static void nodeCommands(String p) {
 		String np = p.replaceAll(" ", "");

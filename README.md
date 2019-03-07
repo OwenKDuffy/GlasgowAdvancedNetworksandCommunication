@@ -32,4 +32,4 @@ TODO:
 * TraceRoot
 * Implement a split horizon system.
 * Test on Windows 10.
-* Multithreading.
+* Multithreading?

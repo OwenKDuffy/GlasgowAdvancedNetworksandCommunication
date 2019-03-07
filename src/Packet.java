@@ -7,8 +7,11 @@ public class Packet {
 	//this would be best as an enum like type
 	//0 = standard message
 	public static final int MESSAGE_EXPIRED_ERROR = 1;
-
-	//1 = message expiredß
+	//1 = message expired
+	public static final int ROUTING_TABLE_UPDATE_REQ = 2;
+	//2 = request routing table update
+	public static final int ROUTING_TABLE_UPDATE_RES = 3;
+	//3 = respond to routing table update
 	Packet(int destinationAddress, int sourceAddress, String message)
 	{
 		dst = destinationAddress;
@@ -16,15 +19,21 @@ public class Packet {
 		msg = message;
 	}
 
+	public Packet(int destinationAddress, int sourceAddress, int msgType, String messageTxt) {
+		dst = destinationAddress;
+		src = sourceAddress;
+		messageType = msgType;
+		msg = messageTxt;
+	}
+
 	public int getDst() {
-		// TODO Auto-generated method stub
 		return dst;
 	}
-	
+
 	public int getSrc() {
 		return src;
 	}
-	
+
 	public String getMsg() {
 		return msg;
 	}
@@ -37,5 +46,8 @@ public class Packet {
 
 	public void setMsgType(int msgType) {
 		this.messageType = msgType;
+	}
+	public int getMsgType() {
+		return messageType;
 	}
 }
