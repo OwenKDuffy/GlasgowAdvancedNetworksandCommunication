@@ -2,6 +2,7 @@
 public class Packet {
 	private int dst, src;
 	private String msg;
+	private int msgid;
 	private int timeToLive = 10;
 	private int messageType = 0; 
 	//this would be best as an enum like type
@@ -15,20 +16,24 @@ public class Packet {
 	public static final int TRACE_ROUTE = 4;
 	//4 = trace route
 
-		Packet(int destinationAddress, int sourceAddress, String message)
+	Packet(int destinationAddress, int sourceAddress, String message)
 	{
 		dst = destinationAddress;
 		src = sourceAddress;
 		msg = message;
 	}
 
-	public Packet(int destinationAddress, int sourceAddress, int msgType, String messageTxt) {
+	public Packet(int destinationAddress, int sourceAddress, int msgType, int id, String messageTxt) {
 		dst = destinationAddress;
 		src = sourceAddress;
 		messageType = msgType;
 		msg = messageTxt;
+		msgid = id;
 	}
 
+	public int getID() {
+		return msgid;
+	}
 	public int getDst() {
 		return dst;
 	}
@@ -52,5 +57,10 @@ public class Packet {
 	}
 	public int getMsgType() {
 		return messageType;
+	}
+
+	public void setMsg(String newMessage) {
+		this.msg = newMessage;
+		return;
 	}
 }

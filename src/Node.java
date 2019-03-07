@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Node {
@@ -5,6 +6,8 @@ public class Node {
 	//	private HashMap<Node, Integer> connectionCost;
 	private HashMap<Integer, Node> connections;
 	private HashMap<Integer, int[]> routingTable;
+	private ArrayList<Integer> messages;
+	private int msgID;
 	Node(int a)
 	{
 		this.address = a;
@@ -13,6 +16,7 @@ public class Node {
 		this.routingTable = new HashMap<Integer, int[]>();
 		routingTable.put(a, new int[] {0, a});
 		//takes 0 time to send to itself via itself
+		messages = new ArrayList<Integer>();
 	}
 
 	void addConnection(Node connectee, int cost)
@@ -28,45 +32,55 @@ public class Node {
 	}
 
 	private void receive(Packet p, Node from) {
-
-		int msgType = p.getMsgType();
-		switch(msgType)
-		{
-		case 0:
-			if(p.getDst()== this.address) {
-			System.out.println("Node: " + this.address + " received message: " + p.getMsg());
-			return;
-			}
-			break;
-		case 1:
-			if(p.getDst()== this.address) {
+		int mID = p.getID();
+		if(!messages.contains(mID)) {
+			messages.add(mID);
+			int msgType = p.getMsgType();
+			switch(msgType)
+			{
+			case 0:
+				if(p.getDst()== this.address) {
+					System.out.println("Node: " + this.address + " received message: " + p.getMsg());
+					return;
+				}
+				break;
+			case 1:
+				if(p.getDst()== this.address) {
+					System.out.println("Node: " + this.address + " received message: " + p.getMsg());
+				}
+				break;
+			case 2:
+				if(p.getDst()== this.address) {
+					sendRoutingTableUpdate(p.getSrc());
+					return;
+				}			
+				break;
+			case 3:
+				if(p.getDst()== this.address) {
+					updateRoutingTables(p, from);
+					return;
+				}
+				break;
+			case 4:
+				if(p.getDst()== this.address) {
+					System.out.println(p.getMsg() + "Destination");
+					return;
+				}
+				
+				String nString = p.getMsg();
+				if (nString == null){
+					nString = "";
+				}
+				nString += "Node " + this.address + " --> ";
+				
+				p.setMsg(nString);
+				break;
+			default:
 				System.out.println("Node: " + this.address + " received message: " + p.getMsg());
+				return;			
 			}
-			break;
-		case 2:
-			if(p.getDst()== this.address) {
-				sendRoutingTableUpdate(p.getSrc());
-				return;
-			}			
-			break;
-		case 3:
-			if(p.getDst()== this.address) {
-			updateRoutingTables(p, from);
-			return;
-			}
-			break;
-		case 4:
-			System.out.print("Node " + this.address + " --> ");
-			if(p.getDst()== this.address) {
-				System.out.println("Destination");
-				return;
-			}
-			break;
-		default:
-			System.out.println("Node: " + this.address + " received message: " + p.getMsg());
-			return;			
+			forwardMessage(p, from);
 		}
-		forwardMessage(p, from);
 	}
 
 
@@ -166,14 +180,14 @@ public class Node {
 
 	}
 	public void createMessage(int destination, int msgType, String message) {
-		Packet p = new Packet(destination, this.address, msgType, message);
+		Packet p = new Packet(destination, this.address, msgType, msgID++, message);
 		//		p.setMsgType(msgType);
 		this.receive(p, this);
 	}
 	public void createRoutingTableRequest()
 	{
 		for (Node n: connections.values()) {
-			Packet p = new Packet(n.address, this.address, Packet.ROUTING_TABLE_UPDATE_REQ, null);
+			Packet p = new Packet(n.address, this.address, Packet.ROUTING_TABLE_UPDATE_REQ, msgID++, null);
 			this.sendTo(n, p);
 		}
 	}

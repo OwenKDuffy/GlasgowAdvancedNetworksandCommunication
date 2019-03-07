@@ -74,6 +74,8 @@ public class Network {
 		}
 		userInput.close();
 	}
+	
+	
 	private static void traceroute(String p) {
 		String np = p.replaceAll(" ", "");
 		String[] newArgs = np.split(",");
@@ -81,21 +83,21 @@ public class Network {
 		int from = Integer.parseInt(newArgs[1]);
 		ntwrk.get(from).createMessage(to, Packet.TRACE_ROUTE, null);
 	}
+	
 	private static void routingTableCommand(String p) {
 		String np = p.replaceAll(" ", "");
 		Node n = ntwrk.get(Integer.parseInt(np));
 		System.out.println(n.printRoutingTable());
-
-
 	}
+	
 	private static void linkCommand(String p) {
 		String np = p.replaceAll(" ", "");
 		String[] newArgs = np.split(",");
 		Node n1 = ntwrk.get(Integer.parseInt(newArgs[0]));
 		Node n2 = ntwrk.get(Integer.parseInt(newArgs[1]));
 		new Link(n1, n2, Integer.parseInt(newArgs[2]));
-
 	}
+	
 	private static void nodeCommands(String p) {
 		String np = p.replaceAll(" ", "");
 		String[] newArgs = np.split(",");
